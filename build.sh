@@ -18,16 +18,21 @@ MAIN_PACKAGE="./main.go"           # adjust if your entry point is different
 EMBED_TARGET_DIR="internal/assets/embed"
 
 # ─── Font configuration ───────────────────────────────────────────────────────
-declare -A FONTS
-FONTS["DejaVuSansMono.ttf"]="/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf:fonts-dejavu-core"
-FONTS["wqy-zenhei.ttc"]="/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc:fonts-wqy-zenhei"
-FONTS["MTLc3m.ttf"]="/usr/share/fonts/truetype/motoya-l-cedar/MTLc3m.ttf:fonts-motoya-l-cedar"
-FONTS["LexiGulim.ttf"]="/usr/share/fonts/truetype/lexi/LexiGulim.ttf:fonts-lexi-gulim"
-FONTS["Symbola_hint.ttf"]="/usr/share/fonts/truetype/ancient-scripts/Symbola_hint.ttf:fonts-symbola"
-FONTS["NotoSansDevanagari-Regular.ttf"]="/usr/share/fonts/truetype/noto/NotoSansDevanagari-Regular.ttf:fonts-noto-core"
-FONTS["NotoSansBengali-Regular.ttf"]="/usr/share/fonts/truetype/noto/NotoSansBengali-Regular.ttf:fonts-noto-core"
-FONTS["NotoSansGurmukhi-Regular.ttf"]="/usr/share/fonts/truetype/noto/NotoSansGurmukhi-Regular.ttf:fonts-noto-core"
+if [[ -d "$PWD/.apt/usr" ]]; then
+    SYSROOT="$PWD/.apt"
+else
+    SYSROOT=""
+fi
 
+declare -A FONTS
+FONTS["DejaVuSansMono.ttf"]="${SYSROOT}/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf:fonts-dejavu-core"
+FONTS["wqy-zenhei.ttc"]="${SYSROOT}/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc:fonts-wqy-zenhei"
+FONTS["MTLc3m.ttf"]="${SYSROOT}/usr/share/fonts/truetype/motoya-l-cedar/MTLc3m.ttf:fonts-motoya-l-cedar"
+FONTS["LexiGulim.ttf"]="${SYSROOT}/usr/share/fonts/truetype/lexi/LexiGulim.ttf:fonts-lexi-gulim"
+FONTS["Symbola_hint.ttf"]="${SYSROOT}/usr/share/fonts/truetype/ancient-scripts/Symbola_hint.ttf:fonts-symbola"
+FONTS["NotoSansDevanagari-Regular.ttf"]="${SYSROOT}/usr/share/fonts/truetype/noto/NotoSansDevanagari-Regular.ttf:fonts-noto-core"
+FONTS["NotoSansBengali-Regular.ttf"]="${SYSROOT}/usr/share/fonts/truetype/noto/NotoSansBengali-Regular.ttf:fonts-noto-core"
+FONTS["NotoSansGurmukhi-Regular.ttf"]="${SYSROOT}/usr/share/fonts/truetype/noto/NotoSansGurmukhi-Regular.ttf:fonts-noto-core"
 # ─── Asset roots (non-font) ───────────────────────────────────────────────────
 ASSET_ROOTS=(
     "share/defs"
