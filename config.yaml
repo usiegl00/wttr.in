@@ -1,0 +1,43 @@
+cache:
+  responses:
+    type: lru
+    size: 50000
+    ttl: 10m
+    enabled: true
+
+  weather:
+    type: disk
+    dir: /tmp/wttr-weather
+    ttl: 45m
+    max_size_mb: 2048
+    cleanup_interval: 15m
+    enabled: true
+
+ip:
+  ipCacheDb: /tmp/wttr-ip.db
+  ipCacheType: db
+  geoip2: .geoip/share/GeoLite2-City.mmdb
+
+geo:
+  locationCacheDb: /tmp/wttr-location.db
+  locationCacheType: db
+
+weather:
+  wwo:
+    baseUrl: "https://wttr.in/{lat},{lon}?format=j1&lang={lang}"
+    key: unused
+    maxConns: 100
+
+logging:
+  accessLog: /dev/stdout
+  errorsLog: /dev/stderr
+  interval: 60
+
+uplink:
+  timeout: 10
+
+renderer:
+  subprocess: []
+
+server:
+  portHttp: 8080
