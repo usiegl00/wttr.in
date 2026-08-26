@@ -1,6 +1,6 @@
-:repo:deb http://archive.ubuntu.com/ubuntu noble universe
-:repo:deb http://archive.ubuntu.com/ubuntu noble-updates universe
-:repo:deb http://security.ubuntu.com/ubuntu noble-security universe
+:repo:deb http://archive.ubuntu.com/ubuntu noble main universe
+:repo:deb http://archive.ubuntu.com/ubuntu noble-updates main universe
+:repo:deb http://security.ubuntu.com/ubuntu noble-security main universe
 
 rsync
 fontconfig
