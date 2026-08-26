@@ -3,8 +3,11 @@ package config
 import (
 	"fmt"
 	"os"
+	"regexp"
+	"strings"
 
-	"gopkg.in/yaml.v2"
+	yamlv2 "gopkg.in/yaml.v2"
+	yamlv3 "gopkg.in/yaml.v3"
 
 	"github.com/chubin/wttr.in/internal/cache"
 	"github.com/chubin/wttr.in/internal/ip"
@@ -43,6 +46,8 @@ type Config struct {
 	Renderer *renderer.Config `yaml:"renderer"`
 }
 
+var envVarPattern = regexp.MustCompile(`\$\{([A-Za-z_][A-Za-z0-9_]*)(:-([^}]*))?\}`)
+
 // LoadFromYAML loads configuration from a YAML file and returns a pointer to Config
 func LoadFromYAML(filePath string) (*Config, error) {
 	// Read the YAML file
@@ -51,11 +56,16 @@ func LoadFromYAML(filePath string) (*Config, error) {
 		return nil, fmt.Errorf("error reading YAML file: %v", err)
 	}
 
+	data, err = expandEnv(data)
+	if err != nil {
+		return nil, fmt.Errorf("error expanding environment variables in YAML: %v", err)
+	}
+
 	// Create a new Config instance
 	config := &Config{}
 
 	// Unmarshal YAML data into the Config struct with strict checking for unknown fields
-	err = yaml.UnmarshalStrict(data, config)
+	err = yamlv2.UnmarshalStrict(data, config)
 	if err != nil {
 		return nil, fmt.Errorf("error unmarshaling YAML: %v", err)
 	}
@@ -63,6 +73,82 @@ func LoadFromYAML(filePath string) (*Config, error) {
 	return config, nil
 }
 
+// expandEnv substitutes ${NAME} and ${NAME:-default} placeholders only inside
+// already-parsed YAML scalar nodes. Environment values are never interpreted as
+// YAML source or shell syntax, so newlines, quotes, and ${...} inside a value
+// remain data inside that scalar.
+func expandEnv(data []byte) ([]byte, error) {
+	var doc yamlv3.Node
+	if err := yamlv3.Unmarshal(data, &doc); err != nil {
+		return nil, err
+	}
+
+	expandEnvNode(&doc)
+
+	return yamlv3.Marshal(&doc)
+}
+
+func expandEnvNode(node *yamlv3.Node) {
+	if node.Kind == yamlv3.ScalarNode {
+		expanded, changed := expandEnvValue(node.Value)
+		if changed {
+			envOnly := node.Value != "" && envVarPattern.ReplaceAllString(node.Value, "") == ""
+			node.Value = expanded
+			if envOnly && node.Style == 0 {
+				node.Tag = yamlTag(expanded)
+			} else {
+				node.Tag = "!!str"
+			}
+		}
+		return
+	}
+
+	for _, child := range node.Content {
+		expandEnvNode(child)
+	}
+}
+
+func expandEnvValue(value string) (string, bool) {
+	changed := false
+	expanded := envVarPattern.ReplaceAllStringFunc(value, func(match string) string {
+		changed = true
+		groups := envVarPattern.FindStringSubmatch(match)
+		if envValue, ok := os.LookupEnv(groups[1]); ok {
+			return envValue
+		}
+		if len(groups) == 4 {
+			return groups[3]
+		}
+		return ""
+	})
+
+	return expanded, changed
+}
+
+func yamlTag(value string) string {
+	switch {
+	case value == "true" || value == "false":
+		return "!!bool"
+	case isYAMLInt(value):
+		return "!!int"
+	default:
+		return "!!str"
+	}
+}
+
+func isYAMLInt(value string) bool {
+	value = strings.TrimPrefix(strings.TrimPrefix(value, "-"), "+")
+	if value == "" {
+		return false
+	}
+	for _, r := range value {
+		if r < '0' || r > '9' {
+			return false
+		}
+	}
+	return true
+}
+
 func (c *Config) MarshalYAML() ([]byte, error) {
-	return yaml.Marshal(c)
+	return yamlv2.Marshal(c)
 }
