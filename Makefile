@@ -1,3 +1,5 @@
+export PATH := $(CURDIR)/.apt/usr/lib/go-1.26/bin:$(PATH)
+
 srv:
 	@bash build.sh build
 
