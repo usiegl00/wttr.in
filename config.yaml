@@ -21,6 +21,11 @@ ip:
 geo:
   locationCacheDb: /tmp/wttr-location.db
   locationCacheType: db
+  nominatim:
+    - name: openmeteo
+      type: openmeteo
+      url: https://geocoding-api.open-meteo.com/v1/search
+      token: ""
 
 weather:
   wwo:

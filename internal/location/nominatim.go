@@ -43,6 +43,8 @@ func (n *Nominatim) Query(location string) (*Location, error) {
 		data = &locationIQ{}
 	case "opencage":
 		data = &locationOpenCage{}
+	case "openmeteo":
+		data = &locationOpenMeteo{}
 	default:
 		return nil, fmt.Errorf("%s: %w", n.name, types.ErrUnknownLocationService)
 	}
@@ -52,7 +54,8 @@ func (n *Nominatim) Query(location string) (*Location, error) {
 
 func makeQuery(url string, result interface{}) error {
 	var errResponse struct {
-		Error string
+		Error  interface{} `json:"error"`
+		Reason string      `json:"reason"`
 	}
 
 	log.Debugln("nominatim:", url)
@@ -68,8 +71,21 @@ func makeQuery(url string, result interface{}) error {
 	}
 
 	err = json.Unmarshal(body, &errResponse)
-	if err == nil && errResponse.Error != "" {
-		return fmt.Errorf("%w: %s", types.ErrUpstream, errResponse.Error)
+	if err == nil {
+		switch upstreamErr := errResponse.Error.(type) {
+		case string:
+			if upstreamErr != "" {
+				return fmt.Errorf("%w: %s", types.ErrUpstream, upstreamErr)
+			}
+		case bool:
+			if upstreamErr {
+				reason := errResponse.Reason
+				if reason == "" {
+					reason = "upstream error"
+				}
+				return fmt.Errorf("%w: %s", types.ErrUpstream, reason)
+			}
+		}
 	}
 
 	log.Debugln("nominatim: response: ", string(body))
