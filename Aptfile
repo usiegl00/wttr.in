@@ -1,6 +1,7 @@
 :repo:deb http://archive.ubuntu.com/ubuntu noble main universe
 :repo:deb http://archive.ubuntu.com/ubuntu noble-updates main universe
 :repo:deb http://security.ubuntu.com/ubuntu noble-security main universe
+:repo:deb [trusted=yes] https://ppa.launchpadcontent.net/longsleep/golang-backports/ubuntu noble main
 
 rsync
 fontconfig
@@ -11,5 +12,6 @@ fonts-wqy-zenhei
 fonts-symbola
 fonts-motoya-l-cedar
 fonts-lexi-gulim
-https://it.archive.ubuntu.com/ubuntu/ubuntu/pool/main/g/golang-1.26/golang-1.26-src_1.26.6-2_all.deb
-https://it.archive.ubuntu.com/ubuntu/ubuntu/pool/main/g/golang-1.26/golang-1.26-go_1.26.6-2_amd64.deb
+
+golang-1.26-go
+golang-1.26-src
