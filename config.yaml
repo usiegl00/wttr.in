@@ -40,4 +40,4 @@ renderer:
   subprocess: []
 
 server:
-  portHttp: 8080
+  portHttp: $PORT
