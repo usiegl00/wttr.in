@@ -1,1 +1,1 @@
-web: ./srv --config config.yaml
+web: ./srv config.yaml
