@@ -23,9 +23,14 @@ if [[ -d "$PWD/.apt/usr" ]]; then
 else
     SYSROOT=""
 fi
+DEJAVU_FONT="/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+
+if [[ -f "$PWD/.apt$DEJAVU_FONT" ]]; then
+    DEJAVU_FONT="$PWD/.apt$DEJAVU_FONT"
+fi
 
 declare -A FONTS
-FONTS["DejaVuSansMono.ttf"]="${SYSROOT}/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf:fonts-dejavu-core"
+FONTS["DejaVuSansMono.ttf"]="$DEJAVU_FONT:fonts-dejavu-core"
 FONTS["wqy-zenhei.ttc"]="${SYSROOT}/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc:fonts-wqy-zenhei"
 FONTS["MTLc3m.ttf"]="${SYSROOT}/usr/share/fonts/truetype/motoya-l-cedar/MTLc3m.ttf:fonts-motoya-l-cedar"
 FONTS["LexiGulim.ttf"]="${SYSROOT}/usr/share/fonts/truetype/lexi/LexiGulim.ttf:fonts-lexi-gulim"
