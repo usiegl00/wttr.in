@@ -1,0 +1,58 @@
+{
+  "name": "wttr-in",
+  "description": "",
+  "keywords": [
+    "build",
+    "build.io"
+  ],
+  "website": "https://wttr.in",
+  "repository": "git@github.com:usiegl00/wttr.in.git",
+  "logo": "",
+  "success_url": "/",
+  "stack": "heroku-24",
+  "scripts": {
+    "postdeploy": ""
+  },
+  "env": {},
+  "formation": {
+    "web": {
+      "size": "Standard-1X",
+      "display": "bash -c ./srv srv config.yaml",
+      "quantity": 1
+    }
+  },
+  "image": "deprecated--see formation->type->image",
+  "addons": [],
+  "buildpacks": [
+    {
+      "url": "https://github.com/KinnTech/heroku-buildpack-apt"
+    },
+    {
+      "url": "https://github.com/grauwoelfchen/heroku-buildpack-make"
+    },
+    {
+      "url": "https://github.com/usiegl00/heroku-buildpack-dbip-lite"
+    }
+  ],
+  "hosts": [],
+  "policy": {
+    "allow_websockets": true,
+    "response_timeout": 30,
+    "max_connections": 1024,
+    "temporary_self_signed": true,
+    "share_process_namespace": true,
+    "erosion_resistance_seconds": 0,
+    "waf": false,
+    "tls_passthrough": false,
+    "build_cache": null,
+    "generate_sbom": false
+  },
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "echo 'Testing...'",
+        "test-setup": "echo 'Setting up test environment...'"
+      }
+    }
+  }
+}
