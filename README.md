@@ -13,7 +13,7 @@ You can see it running here: [wttr.in](https://wttr.in).
 
 [Documentation](https://wttr.in/:help) | [Usage](https://github.com/chubin/wttr.in#usage) | [One-line output](https://github.com/chubin/wttr.in#one-line-output) | [Data-rich output format](https://github.com/chubin/wttr.in#data-rich-output-format-v2) | [Map view](https://github.com/chubin/wttr.in#map-view-v3) | [Output formats](https://github.com/chubin/wttr.in#different-output-formats) | [Moon phases](https://github.com/chubin/wttr.in#moon-phases) | [Internationalization](https://github.com/chubin/wttr.in#internationalization-and-localization) | [Installation](https://github.com/chubin/wttr.in#installation)
 
-[![Deploy to Build](https://app.build.io/deploy-to-build-button.svg)](https://app.build.io/deploy?template=https://github.com/usiegl00/wttr.in)
+[![Deploy to Build](https://app.build.io/deploy-to-build-button.svg)](https://app.build.io/deploy)
 
 
 ## Usage
